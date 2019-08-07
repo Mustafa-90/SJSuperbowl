@@ -6,7 +6,7 @@ public class SuperbowlApplication {
 
     public static void main(String[] args) {
         int count = 0;
-        String connstr = "jdbc:sqlserver://localhost;databasename=Superbowl;user=admindb;password=123123";
+        String connstr = "jdbc:sqlserver://localhost;databasename=Superbowl;user=Fredrik;password=otl827";
 
         try (Connection conn = DriverManager.getConnection(connstr)) {
             Statement st = conn.createStatement();
