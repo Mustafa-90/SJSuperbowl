@@ -5,7 +5,11 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
+<<<<<<< HEAD
         <version>2.1.7.RELEASE</version>
+=======
+        <version>2.1.6.RELEASE</version>
+>>>>>>> 666a13b816093ebc7e03424d9d281755c116caef
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
@@ -24,11 +28,14 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <dependency>
+<<<<<<< HEAD
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
             <version>7.2.2.jre8</version>
         </dependency>
         <dependency>
+=======
+>>>>>>> 666a13b816093ebc7e03424d9d281755c116caef
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
@@ -36,10 +43,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+<<<<<<< HEAD
 
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
+=======
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>7.2.2.jre8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+>>>>>>> 666a13b816093ebc7e03424d9d281755c116caef
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -47,11 +66,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+<<<<<<< HEAD
         <!--        <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-data-jpa</artifactId>
                     <scope>provided</scope>
                 </dependency>-->
+=======
+>>>>>>> 666a13b816093ebc7e03424d9d281755c116caef
     </dependencies>
 
     <build>

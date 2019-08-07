@@ -13,7 +13,7 @@ public class VideoController {
     @GetMapping("/Cindy")
     public String test(Model model) {
         String result;
-        String connstr = "jdbc:sqlserver://localhost;databasename=Superbowl;user=admindb;password=123123";
+        String connstr = "jdbc:sqlserver://localhost;databasename=Superbowl;user=dbadmin;password=123123";
         try (Connection conn = DriverManager.getConnection(connstr)) {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery("Select name FROM Video where id = 3");
