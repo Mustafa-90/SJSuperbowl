@@ -12,6 +12,7 @@ import java.sql.*;
 @Controller
 public class VideoController {
 
+    Tag tagSearch = new Tag();
     String connstr = "jdbc:sqlserver://localhost;databasename=Superbowl;user=dbadmin;password=123123";
 
     @GetMapping("/Cindy")
@@ -66,28 +67,6 @@ public class VideoController {
         model.addAttribute("description", description);
         model.addAttribute("embedded", embeddedUrl);
         model.addAttribute("companyname", companyName);
-
-        /* *//*
-
-        try (Connection conn = DriverManager.getConnection(connstr)) {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, searchBar);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                name = rs.getString(1);
-               *//* ;
-            }
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
-        model.addAttribute("name", name); */
-        /*    */
-        //PreparedStatement
 
         return "search";
     }
