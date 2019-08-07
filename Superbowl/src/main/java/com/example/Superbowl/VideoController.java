@@ -12,7 +12,7 @@ import java.sql.*;
 @Controller
 public class VideoController {
 
-    String connstr = "jdbc:sqlserver://localhost;databasename=Superbowl;user=admindb;password=123123";
+    String connstr = "jdbc:sqlserver://localhost;databasename=Superbowl;user=dbadmin;password=123123";
 
     @GetMapping("/Cindy")
     public String test(Model model) {
