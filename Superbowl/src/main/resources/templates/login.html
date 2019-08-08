@@ -46,23 +46,17 @@
 <div class="LogoSearchBar">
     <img id="Logo" src="SBlogo.png"/>
     <div id="SearchBar">
-        <form method="POST" action="search">
-            <input type="field" name="searchBar" size="100"/>
-            <input type="submit" value="GO SEARCH!"/>
+        <form method="POST" action="/login">
+            <input type="field" name="username"/>
+            <input type="password" name="password"/>
+            <input type="submit" value="login">
         </form>
     </div>
 </div>
 <div id="PageContent">
     <div class="content content-page-1">
 
-        <ul th:each="video : ${listOfVideos}">
-            <li th:text="${video.videoName}"></li>
-            <li th:text="${video.description}"></li>
-            <li th:text="${video.companyName}"></li>
-            <iframe width="400" height="300" th:src="${video.embeddedUrl}" frameborder="0"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-        </ul>
+
     </div>
 </div>
 <div id="PageFooter">All rights reserved to SJ Superbowl Limited 2019</div>
