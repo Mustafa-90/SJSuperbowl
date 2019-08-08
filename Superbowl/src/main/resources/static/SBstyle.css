@@ -1,24 +1,5 @@
-=/**.Header {
-  display: flex;
-  margin: 0 auto;
-  flex-wrap: wrap;
-  clear: both;
-  position: relative;
-}*/
-
-#NavBar {
-  display: flex;
-  margin: 0 auto;
-  align-content: space-around;
-  box-shadow: 0 0 20px black;
-  position: fixed;
-  flex-wrap: wrap;
-  margin-bottom: 1%;
-  width: 800px;
-}
-
-#NavBar > * {
-  flex: 1 0 auto;
+.rotated {
+  transform: rotate(90deg);
 }
 
 .hidden {
@@ -29,58 +10,112 @@
   opacity: 1;
 }
 
-/*#NavBar {
-  opacity: 0;
-  overflow: hidden;
-  transition: all 1s;
-}*/
-
-#NavBar a {
-  display: inline-block;
+#PageFooter {
+  padding: 2px 0 0 0;
+  box-shadow: 0 0 20px black;
+  text-shadow: 0 0 2px black;
+  color: white;
   text-align: center;
-  padding: 14px 30px;
-  margin: 0 5px;
-  color: black;
-  text-decoration: none;
-  font: 15px;
-  text-shadow: 0 0 2px gray;
+  margin-top: 6%;
+  position: relative;
 }
+
 #PageBody {
-  background-image: url("Background.jpg");
+  width: 1200px;
+  margin: 0 auto;
+  background-image: url(Background.jpg);
   background-attachment: fixed;
-  background-size: 100% auto;
   background-position: center;
+  background-size: 100% auto;
+}
+#SearchBar,
+#Logo {
+  margin-left: 10%;
+  padding-top: 2%;
+}
+
+#LoginBar
+{
+  margin-left: 30%;
+  padding-top: 2%;
+}
+
+#PageContent {
   padding: 1px 0;
 }
 
-#Logo {
-  padding-left: 18%;
-  padding-top: 10%;
-}
-
-#SearchBar {
-  margin-top: 10%;
+#PageNavigation {
   display: flex;
+  width: 80%;
   margin: 0 auto;
   align-content: space-around;
-  flex-wrap: wrap;
-}
-
-form {
-  display: flex;
-  margin: 0 auto;
-  align-content: space-around;
-  flex-wrap: wrap;
-  margin-bottom: 1%;
-}
-
-#PageFooter {
-  margin-top: 70%;
-  padding: 10px;
-  box-shadow: 0 0 20px black;
-  text-align: center;
-  text-shadow: 0 0 2px black;
   color: white;
+  font: 13px;
+  text-shadow: 0 0 10px black;
+}
+
+#PageNavigation > * {
+  flex: 1 0 auto;
+}
+
+#PageNavigation a {
+  display: block;
+  text-align: center;
+  padding: 12px 30px;
+  margin: 0 5px;
+  text-decoration: none;
+  color: white;
+  text-shadow: 0 0 10px black;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: rgba(216, 214, 211, 0.247);
+}
+
+#hamburger {
+  color: white;
+  text-shadow: 0 0 10px black;
+  border: none;
+  background-color: antiquewhite;
+}
+
+#BoxContainer {
+  margin-top: 5%;
+  margin-right: 5%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.Box {
+  color: yellow;
+  width: 25%;
+}
+
+.VideoBox {
+  color: yellow;
+}
+
+.TextBox {
+  color: lightblue;
+}
+
+#PageNavigation {
+  opacity: 0;
+  overflow: hidden;
+  transition: all 1s;
 }
 
 @media only screen and (max-device-width: 768px) {

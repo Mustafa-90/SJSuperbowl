@@ -1,122 +1,124 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
-    <meta charset="UTF-8"/>
-    <title>Superbowl Commercials</title>
-    <link rel="stylesheet" type="text/css" href="normalize.css"/>
-    <link rel="stylesheet" type="text/css" href="SBstyle.css"/>
-    <script src="SBscript.js"></script>
+    <title>SJ SuperBowl</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" href="/normalize.css"/>
+    <link rel="stylesheet" type="text/css" href="/SBstyle.css"/>
+
+    <script src="/SBscript.js"></script>
 </head>
+
 <body id="PageBody" class="current-page-1">
+
 <div id="Header">
-    <div id="NavBar">
+
+    <div id="PageNavigation">
         <div>
-            <a href="#"
-                    class="menu-item"
-                    data-target="content-page-1"
-                    data-index="1">Home</a>
+            <a href="#" th:href="@{/logout}" class="menu-item" data-target="content-page-4" data-index="3"
+               style='color: red'>Log
+                out</a>
         </div>
         <div>
-            <a href="#"
-                    class="menu-item"
-                    data-target="content-page-1"
-                    data-index="1">Commercials</a>
+            <a href="#" class="menu-item" data-target="content-page-1" data-index="1">Home</a>
         </div>
         <div>
-            <a
-                    href="#"
-                    class="menu-item"
-                    data-target="content-page-2"
-                    data-index="1"
-            >Genres</a
-            >
+            <a href="#" class="menu-item" data-target="content-page-2" data-index="2">Commercials</a>
         </div>
-        <div>
-            <a
-                    href="#"
-                    class="menu-item"
-                    data-target="content-page-3"
-                    data-index="1"
-            >Products</a
-            >
+        <div class="dropdown">
+            <a class="dropbutton">Genres</a>
+            <div class="dropdown-content">
+                <a href="/genre/action">Action</a>
+                <a href="/genre/comedy">Comedy</a>
+                <a href="/genre/relation">Relation</a>
+                <a href="/genre/drama">Drama</a>
+                <a href="/genre/romance">Romance</a>
+                <a href="/genre/adventure">Adventure</a>
+                <a href="/genre/sport">Sport</a>
+            </div>
+
+        </div>
+        <div class="dropdown">
+            <a class="dropbutton">Products</a>
+            <div class="dropdown-content">
+                <a href="/genre/technology">Technology</a>
+                <a href="/genre/automobile">Automobile</a>
+                <a href="/genre/food">Food</a>
+                <a href="/genre/sport">Sport</a>
+                <a href="/genre/clothes">Clothes</a>
+                <a href="/genre/accessories">Accessories</a>
+                <a href="/genre/service">Service</a>
+            </div>
         </div>
     </div>
-    <button id="hamburger">=</button>
+    <button id="hamburger">Show Menu</button>
 </div>
 <div class="LogoSearchBar">
-    <img id="Logo" src="SBlogo.png"/>
+    <img id="Logo" src="/SBlogo.png"/>
     <div id="SearchBar">
-        <form method="POST" action="search">
-            <!--<select name="Genre">
-          <option value="All">All</option>
-          <option value="Action">Action</option>
-          <option value="Comedy">Comedy</option>
-          <option value="Relation">Relation</option>
-          <option value="Drama">Drama</option>
-          <option value="Romance">Romance</option>
-          <option value="Horror">Horror</option>
-          <option value="Adventure">Adventure</option>
-        </select>
-        <select name="Category">
-          <option value="All">All</option>
-          <option value="Technology">Technology</option>
-          <option value="Automobile">Automobile</option>
-          <option value="Food">Food</option>
-          <option value="Environment">Environment</option>
-          <option value="Gaming">Gaming</option>
-          <option value="Sport">Sport</option>
-          <option value="Betting">Betting</option>
-          <option value="Kids">Kids</option>
-          <option value="Toys">Toys</option>
-        </select>-->
+        <form method="POST" action="/search">
             <input type="field" name="searchBar" size="100"/>
             <input type="submit" value="GO SEARCH!"/>
         </form>
     </div>
-</div>
-<div id="PageContent">
-    <div class="content content-page-1">
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-            fringilla risus nec orci cursus mollis. Nunc nec eros ut tellus
-            efficitur gravida. Vivamus dictum turpis a mi viverra ullamcorper. Ut
-            consectetur auctor urna, et auctor lectus porttitor vel. Morbi
-            volutpat quam sem, et fermentum arcu vulputate in. Nulla convallis
-            ornare elit et fermentum. Pellentesque a lorem sit amet tortor semper
-            condimentum quis non ante. Ut pulvinar vulputate felis, non gravida
-            lectus volutpat et. Ut pulvinar dolor et pellentesque tempus.
-            Curabitur blandit malesuada urna et venenatis.
-        </p>
-    </div>
-    <div class="content content-page-2">
-        <p>
-            Aliquam rutrum, orci eget maximus semper, est eros mattis ipsum, vitae
-            ultrices quam nisi sed odio. Duis mattis, ante vel consectetur
-            sodales, ligula eros gravida ipsum, congue semper ex eros nec tellus.
-            Maecenas consectetur lobortis mi. Vivamus dolor tellus, convallis ac
-            elementum nec, condimentum non ante. Sed scelerisque sit amet dolor
-            non dignissim. Mauris pulvinar sem eu finibus dapibus. Nullam a
-            placerat erat. Aliquam erat volutpat. Maecenas viverra justo eu ex
-            scelerisque convallis.
-        </p>
-    </div>
+    <div id="PageContent">
+        <div id="BoxContainer">
+            <div id="Box1" class="Box" th:if="${allVideos[0]} != null">
+                <th th:text="${allVideos[0].videoName}"></th>
+                <div id="VideoBox1" class="VideoBox">
+                    <iframe th:src="${allVideos[0].embeddedUrl}" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <!--</ul>-->
+                </div>
+                <div id="TextBox1" class="TextBox">
+                    <th th:text="${allVideos[0].description}"></th>
+                </div>
+            </div>
 
-    <div class="content content-page-3">
-        <p>
-            Praesent diam neque, scelerisque id mauris et, venenatis pulvinar
-            lectus. Ut accumsan tristique quam eget sagittis. Fusce condimentum
-            eget dolor id tristique. Nulla magna felis, ornare non accumsan sit
-            amet, tempor eget elit. Phasellus diam justo, venenatis quis libero a,
-            fermentum ullamcorper est. Sed ut faucibus nisi, ac consectetur felis.
-            In vel orci ut arcu varius auctor at euismod tellus. Proin scelerisque
-            faucibus lorem non tincidunt. Ut urna augue, porttitor et neque quis,
-            tincidunt consectetur augue. Aliquam erat volutpat. Nam ut augue urna.
-            Integer lacinia rutrum condimentum. Donec vel mauris id ante sagittis
-            vestibulum. Quisque at justo ex. Ut vel consectetur massa. Sed sodales
-            ligula euismod elit luctus sagittis.
-        </p>
+            <div id="Box2" class="Box" th:if="${#lists.size(allVideos) gt 1}">
+                <th th:text="${allVideos[1].videoName}"></th>
+                <div id="VideoBox2" class="VideoBox">
+                    <th th:if="${allVideos[1]} != null">
+                        <iframe th:src="${allVideos[1].embeddedUrl}" frameborder="0"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                </div>
+                <div id="TextBox2" class="TextBox">
+                    <th th:text="${allVideos[1].description}"></th>
+                </div>
+            </div>
+
+            <div id="Box3" class="Box" th:if="${#lists.size(allVideos) gt 2}">
+                <th th:text="${allVideos[2].videoName}"></th>
+                <div id="VideoBox3" class="VideoBox">
+                    <iframe th:src="${allVideos[2].embeddedUrl}" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
+                <div id="TextBox3" class="TextBox">
+                    <th th:text="${allVideos[2].description}"></th>
+                </div>
+            </div>
+
+            <div id="Box4" class="Box" th:if="${#lists.size(allVideos) gt 3}">
+                <th th:text="${allVideos[3]?.videoName}"></th>
+                <div id="VideoBox4" class="VideoBox">
+                    <!--<ul th:each="video : ${allVideos}">-->
+                    <!-- <li /li>-->
+                    <iframe th:src="${allVideos[3]?.embeddedUrl}" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <!--</ul>-->
+                </div>
+                <div id="TextBox4" class="TextBox">
+                    <th th:text="${allVideos[3]?.description}"></th>
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
-<div id="PageFooter">All rights reserved to SJ Superbowl Limited 2019</div>
+    <div id="PageFooter">Copyright Academy 2019</div>
 </body>
 </html>

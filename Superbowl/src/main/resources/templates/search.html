@@ -1,70 +1,136 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
-    <meta charset="UTF-8"/>
-    <title>Superbowl Commercials</title>
-    <link rel="stylesheet" type="text/css" href="normalize.css"/>
-    <link rel="stylesheet" type="text/css" href="SBstyle.css"/>
-    <script src="SBscript.js"></script>
+    <title>SJ SuperBowl</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" href="/normalize.css"/>
+    <link rel="stylesheet" type="text/css" href="/SBstyle.css"/>
+
+    <script src="/SBscript.js"></script>
 </head>
+
 <body id="PageBody" class="current-page-1">
+
 <div id="Header">
-    <!-- <div id="NavBar">
-         <div>
-             <a href="#"
-                class="menu-item"
-                data-target="content-page-1"
-                data-index="1">Home</a>
-         </div>
-         <div>
-             <a href="#"
-                class="menu-item"
-                data-target="content-page-1"
-                data-index="1">Commercials</a>
-         </div>
-         <div>
-             <a
-                     href="#"
-                     class="menu-item"
-                     data-target="content-page-2"
-                     data-index="1"
-             >Genres</a
-             >
-         </div>
-         <div>
-             <a
-                     href="#"
-                     class="menu-item"
-                     data-target="content-page-3"
-                     data-index="1"
-             >Products</a
-             >
-         </div>
-     </div>-->
-    <button id="hamburger">=</button>
+
+    <div id="PageNavigation">
+        <div>
+            <a href="/logout" class="menu-item" data-target="content-page-4" data-index="3" style='color: red'>Log
+                out
+            </a>
+        </div>
+        <div>
+            <a href="#" class="menu-item" data-target="content-page-1" data-index="1">Home</a>
+        </div>
+        <div>
+            <a href="#" class="menu-item" data-target="content-page-2" data-index="2">Commercials</a>
+        </div>
+        <div class="dropdown">
+            <a class="dropbutton">Genres</a>
+            <div class="dropdown-content">
+                <a href="/genre/action">Action</a>
+                <a href="/genre/comedy">Comedy</a>
+                <a href="/genre/relation">Relation</a>
+                <a href="/genre/drama">Drama</a>
+                <a href="/genre/romance">Romance</a>
+                <a href="/genre/adventure">Adventure</a>
+                <a href="/genre/sport">Sport</a>
+            </div>
+
+        </div>
+        <div class="dropdown">
+            <a class="dropbutton">Products</a>
+            <div class="dropdown-content">
+                <a href="/genre/technology">Technology</a>
+                <a href="/genre/automobile">Automobile</a>
+                <a href="/genre/food">Food</a>
+                <a href="/genre/sport">Sport</a>
+                <a href="/genre/clothes">Clothes</a>
+                <a href="/genre/accessories">Accessories</a>
+                <a href="/genre/service">Service</a>
+            </div>
+        </div>
+    </div>
+    <button id="hamburger">Show Menu</button>
 </div>
 <div class="LogoSearchBar">
-    <img id="Logo" src="SBlogo.png"/>
+    <img id="Logo" src="/SBlogo.png"/>
     <div id="SearchBar">
-        <form method="POST" action="search">
+        <form method="POST" action="/search">
             <input type="field" name="searchBar" size="100"/>
             <input type="submit" value="GO SEARCH!"/>
         </form>
     </div>
-</div>
-<div id="PageContent">
-    <div class="content content-page-1">
+    <div id="PageContent">
+        <div id="BoxContainer">
+            <div id="Box1" class="Box" th:if="${listOfVideos[0]} != null">
+                <th th:text="${listOfVideos[0].videoName}"></th>
+                <div id="VideoBox1" class="VideoBox">
+                    <iframe th:src="${listOfVideos[0].embeddedUrl}" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <!--</ul>-->
+                </div>
+                <div id="TextBox1" class="TextBox">
+                    <th th:text="${listOfVideos[0].description}"></th>
+                </div>
+            </div>
 
-        <ul th:each="video : ${listOfVideos}">
-            <li th:text="${video.videoName}"></li>
-            <li th:text="${video.description}"></li>
-            <li th:text="${video.companyName}"></li>
-            <iframe width="400" height="300" th:src="${video.embeddedUrl}" frameborder="0"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-        </ul>
+            <div id="Box2" class="Box" th:if="${#lists.size(listOfVideos) gt 1}">
+                <th th:text="${listOfVideos[1].videoName}"></th>
+                <div id="VideoBox2" class="VideoBox">
+                    <th th:if="${listOfVideos[1]} != null">
+                        <iframe th:src="${listOfVideos[1].embeddedUrl}" frameborder="0"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                </div>
+                <div id="TextBox2" class="TextBox">
+                    <th th:text="${listOfVideos[1].description}"></th>
+                </div>
+            </div>
+
+            <div id="Box3" class="Box" th:if="${#lists.size(listOfVideos) gt 2}">
+                <th th:text="${listOfVideos[2].videoName}"></th>
+                <div id="VideoBox3" class="VideoBox">
+                    <iframe th:src="${listOfVideos[2].embeddedUrl}" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
+                <div id="TextBox3" class="TextBox">
+                    <th th:text="${listOfVideos[2].description}"></th>
+                </div>
+            </div>
+
+            <div id="Box4" class="Box" th:if="${#lists.size(listOfVideos) gt 3}">
+                <th th:text="${listOfVideos[3]?.videoName}"></th>
+                <div id="VideoBox4" class="VideoBox">
+                    <!--<ul th:each="video : ${listOfVideos}">-->
+                    <!-- <li /li>-->
+                    <iframe th:src="${listOfVideos[3]?.embeddedUrl}" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <!--</ul>-->
+                </div>
+                <div id="TextBox4" class="TextBox">
+                    <th th:text="${listOfVideos[3]?.description}"></th>
+                </div>
+            </div>
+
+        </div>
+        <span th:if="${showPrev}">
+<a th:href="'/search/' + ${currentPage-1}">Previous</a>
+</span>
+
+        <span th:each="page : ${pages}">
+<span th:if="${currentPage == page}" th:text="${page}"></span>
+<a th:if="${currentPage != page}" th:href="'/search/' + ${page}" th:text="${page}"></a>
+</span>
+
+        <span th:if="${showNext}">
+<a th:href="'/search/' + ${currentPage+1}">Next</a>
+</span>
     </div>
-</div>
-<div id="PageFooter">All rights reserved to SJ Superbowl Limited 2019</div>
+    <div id="PageFooter">Copyright Academy 2019</div>
 </body>
 </html>

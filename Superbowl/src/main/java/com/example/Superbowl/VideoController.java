@@ -1,27 +1,39 @@
 package com.example.Superbowl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
 public class VideoController {
 
-    //VideoModel vm = new VideoModel();
+    @Autowired
+    VideoRepository vr;
+
+    @Autowired
+    GenreRepository gr;
+
+    static String now = "";
+
     String connstr = "jdbc:sqlserver://localhost;databasename=Superbowl2;user=dbadmin;password=123123";
 
-
     @GetMapping("/login")
-    public String getLogin(HttpSession session) {
+    public String getLogin(HttpSession session, Model model) {
         String checkSession = (String) session.getAttribute("username");
         if (checkSession != null) {
+            List<Video> allVideos = vr.getAllVideos();
+            Collections.shuffle(allVideos);
+            model.addAttribute("allVideos", allVideos);
             return "search";
         } else {
             return "login";
@@ -29,49 +41,40 @@ public class VideoController {
     }
 
     @PostMapping("/login")
-    public String postLogin(HttpSession session, @RequestParam String username, @RequestParam String password) {
-        String userLogin = "";
-        String userPassword = "";
-        String sql = "SELECT username, password\n" +
-                "FROM UserAccount\n" +
-                "WHERE username = ?\n" +
-                "AND password = ?";
+    public String postLogin(Model model, HttpSession session, @RequestParam String username, @RequestParam String password) {
+        String check = vr.loginMethod(username, password);
 
-        try (Connection conn = DriverManager.getConnection(connstr)) {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                userLogin = rs.getString(1);
-                userPassword = rs.getString(2);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (userLogin.equals(username.toLowerCase()) && userPassword.equals(password)) {
+        if (check.equals("SBindex")) {
             session.setAttribute("username", username);
+            model.addAttribute("userLogin", username);
+
+            List<Video> allVideos = vr.getAllVideos();
+            Collections.shuffle(allVideos);
+            model.addAttribute("allVideos", allVideos);
+        }
+        return check;
+    }
+
+    @GetMapping("/")
+    public String getHomepage(HttpSession session, Model model) {
+        String checkSession = (String) session.getAttribute("username");
+        if (checkSession != null) {
+            List<Video> allVideos = vr.getAllVideos();
+            Collections.shuffle(allVideos);
+            model.addAttribute("allVideos", allVideos);
+
             return "SBindex";
         } else {
             return "login";
         }
     }
 
-    @GetMapping("/")
-    public String getHomepage(HttpSession session) {
-        String checkSession = (String) session.getAttribute("username");
-        if (checkSession != null) {
-            return "search";
-        } else {
-            return "login";
-        }
-    }
-
     @GetMapping("/search")
-    public String getSearch(HttpSession session) {
+    public String getSearch(HttpSession session, Model model) {
         String checkSession = (String) session.getAttribute("username");
         if (checkSession != null) {
+            List<Video> allVideos = vr.getAllVideos();
+            model.addAttribute("allVideos", allVideos);
             return "search";
         } else {
             return "login";
@@ -81,70 +84,68 @@ public class VideoController {
     @PostMapping("/search")
     public String postSearch(Model model, @RequestParam String searchBar) {
 
-        List<Video> listOfVideos = new ArrayList<>();
-        String name = "", description = "", embeddedUrl = "", companyName = "";
-        String[] tags = new String[3];
-        String[] splitTags = searchBar.split(" ");
-
-        tags[0] = splitTags[0];
-        if (splitTags.length > 1)
-            tags[1] = splitTags[1];
-        if (splitTags.length > 2)
-            tags[2] = splitTags[2];
-
-
-        String sql = "SELECT name, Description, embedded_URL, companyName\n" +
-                "FROM Video\n" +
-                "JOIN Company ON company_Id = Company.id\n" +
-                "JOIN Genre on genre_Id = Genre.id\n" +
-                "JOIN category on category_id = category.id\n" +
-                "WHERE searchtag like ?\n" +
-                "OR searchtag like ?\n" +
-                "OR searchtag like ?";
-
-        try (Connection conn = DriverManager.getConnection(connstr)) {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, "%" + tags[0] + "%");
-            ps.setString(2, "%" + tags[1] + "%");
-            ps.setString(3, "%" + tags[2] + "%");
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                name = rs.getString(1);
-                description = rs.getString(2);
-                embeddedUrl = rs.getString(3);
-                companyName = rs.getString(4);
-                listOfVideos.add(new Video(name, description, companyName, embeddedUrl));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        List<Video> listOfVideos = vr.searchVideo(searchBar);
         model.addAttribute("listOfVideos", listOfVideos);
+        now = searchBar;
+
+        int page = 0;
+        int pageSize = 4;
+        int pageCount = (int) Math.ceil(new Double(listOfVideos.size()) / pageSize);
+        List<Video> vid = vr.getPage(page - 1, pageSize, listOfVideos);
+
+        int[] pages = toArray(pageCount);
+        model.addAttribute("vid", vid);
+        model.addAttribute("pages", pages);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("showPrev", page > 1);
+        model.addAttribute("showNext", page < pageCount);
+
+
         return "search";
     }
 
-
-    /* */
-
-    /**
-     * TEST METOD FÖR DROP DOWN MENYN.
-     *
-     * @param model
-     * @param searchBar
-     * @param genreList
-     * @param categoryList
-     * @return
-     *//*
-
-    @PostMapping("/search")
-    public String postSearch(Model model, @RequestParam String searchBar, @RequestParam(defaultValue = "Genre") String genreList, @RequestParam(defaultValue = "Category") String categoryList) {
-
-        return vm.searchMethod(model, searchBar, genreList, categoryList);
-    }*/
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public String getLogout(HttpSession session) {
         session.invalidate();
         return "login";
     }
+
+    @GetMapping("/genre/{genre}")
+    public String getActionGenre(Model model, @PathVariable String genre) {
+        List<Video> listOfVideos = gr.getGenreVideos(genre);
+        model.addAttribute("listOfVideos", listOfVideos);
+
+        return "search";
+
+    }
+
+    @GetMapping("/search/{page}")
+    public String book(Model model, @PathVariable Integer page) {
+
+        List<Video> listOfVideos = vr.searchVideo(now);
+
+        int pageSize = 4;
+        int pageCount = (int) Math.ceil(new Double(listOfVideos.size()) / pageSize);
+        List<Video> vid = vr.getPage(page - 1, pageSize, listOfVideos);
+
+        int[] pages = toArray(pageCount);
+
+        model.addAttribute("listOfVideos", listOfVideos);
+        model.addAttribute("vid", vid);
+        model.addAttribute("pages", pages);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("showPrev", page > 1);
+        model.addAttribute("showNext", page < pageCount);
+        model.addAttribute("page", page);
+        return "search";
+    }
+
+    private int[] toArray(int num) {
+        int[] result = new int[num];
+        for (int i = 0; i < num; i++) {
+            result[i] = i + 1;
+        }
+        return result;
+    }
+
 }
