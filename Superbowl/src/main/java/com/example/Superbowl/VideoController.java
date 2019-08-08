@@ -1,15 +1,12 @@
 package com.example.Superbowl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
-import java.awt.print.Book;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,17 +14,22 @@ import java.util.List;
 @Controller
 public class VideoController {
 
-    Tag tagSearch = new Tag();
+    //VideoModel vm = new VideoModel();
     String connstr = "jdbc:sqlserver://localhost;databasename=Superbowl2;user=dbadmin;password=123123";
 
 
     @GetMapping("/login")
-    public String form() {
-        return "login";
+    public String getLogin(HttpSession session) {
+        String checkSession = (String) session.getAttribute("username");
+        if (checkSession != null) {
+            return "search";
+        } else {
+            return "login";
+        }
     }
 
     @PostMapping("/login")
-    public String login(HttpSession session, @RequestParam String username, @RequestParam String password) {
+    public String postLogin(HttpSession session, @RequestParam String username, @RequestParam String password) {
         String userLogin = "";
         String userPassword = "";
         String sql = "SELECT username, password\n" +
@@ -57,14 +59,28 @@ public class VideoController {
     }
 
     @GetMapping("/")
-    public String form(Model model) {
+    public String getHomepage(HttpSession session) {
+        String checkSession = (String) session.getAttribute("username");
+        if (checkSession != null) {
+            return "search";
+        } else {
+            return "login";
+        }
+    }
 
-
-        return "login";
+    @GetMapping("/search")
+    public String getSearch(HttpSession session) {
+        String checkSession = (String) session.getAttribute("username");
+        if (checkSession != null) {
+            return "search";
+        } else {
+            return "login";
+        }
     }
 
     @PostMapping("/search")
-    public String goSearch(Model model, @RequestParam String searchBar, HttpSession session) {
+    public String postSearch(Model model, @RequestParam String searchBar) {
+
         List<Video> listOfVideos = new ArrayList<>();
         String name = "", description = "", embeddedUrl = "", companyName = "";
         String[] tags = new String[3];
@@ -75,6 +91,7 @@ public class VideoController {
             tags[1] = splitTags[1];
         if (splitTags.length > 2)
             tags[2] = splitTags[2];
+
 
         String sql = "SELECT name, Description, embedded_URL, companyName\n" +
                 "FROM Video\n" +
@@ -108,8 +125,26 @@ public class VideoController {
     }
 
 
-    @GetMapping("hej")
-    public String hej() {
-        return "hej";
+    /* */
+
+    /**
+     * TEST METOD FÖR DROP DOWN MENYN.
+     *
+     * @param model
+     * @param searchBar
+     * @param genreList
+     * @param categoryList
+     * @return
+     *//*
+
+    @PostMapping("/search")
+    public String postSearch(Model model, @RequestParam String searchBar, @RequestParam(defaultValue = "Genre") String genreList, @RequestParam(defaultValue = "Category") String categoryList) {
+
+        return vm.searchMethod(model, searchBar, genreList, categoryList);
+    }*/
+    @PostMapping("/logout")
+    public String getLogout(HttpSession session) {
+        session.invalidate();
+        return "login";
     }
 }
