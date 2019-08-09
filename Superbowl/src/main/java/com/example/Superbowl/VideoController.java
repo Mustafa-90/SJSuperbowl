@@ -423,4 +423,9 @@ public class VideoController {
         }
     }
 
+    @PostMapping("/logout")
+    public String getLogout(HttpSession session) {
+        session.invalidate();
+        return "login";
+    }
 }
