@@ -6,8 +6,8 @@
   display: none;
 }
 
-#PageBody .open {
-  opacity: 1;
+#PageBody .close {
+  opacity: 0;
 }
 
 #PageFooter {
@@ -16,8 +16,7 @@
   text-shadow: 0 0 2px black;
   color: white;
   text-align: center;
-  margin-top: 6%;
-  position: relative;
+  position: flex;
 }
 
 #PageBody {
@@ -30,14 +29,64 @@
 }
 #SearchBar,
 #Logo {
-  margin-left: 10%;
-  padding-top: 2%;
+  margin-left: 7%;
+  padding-top: 1%;
 }
 
-#LoginBar
-{
-  margin-left: 30%;
-  padding-top: 2%;
+.SearchBox {
+  padding: 0.75rem 1.5rem;
+  border-top-left-radius: 27px;
+  border-bottom-left-radius: 27px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: rgba(250, 235, 215, 0.466);
+  text-shadow: 0 0 2px black;
+  color: white;
+}
+
+.SearchBox:hover {
+  background-color: rgba(250, 235, 215, 0.596);
+  box-shadow: 0 0 30px black;
+}
+
+.SearchButton {
+  padding: 0.75rem 1.5rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 27px;
+  border-bottom-right-radius: 27px;
+  background-color: rgba(0, 0, 0, 0.336);
+  color: antiquewhite;
+}
+
+.SearchButton:hover {
+  background-color: rgba(0, 0, 0, 0.836);
+  box-shadow: 0 0 30px black;
+}
+
+.Pagination {
+  display: flex;
+  flex-basis: auto;
+  justify-content: space-around;
+  padding: 2px 0 0 0;
+  color: white;
+}
+
+.PageButton {
+  padding: 0.75rem 1.5rem;
+  border-top-left-radius: 27px;
+  border-bottom-left-radius: 27px;
+  border-top-right-radius: 27px;
+  border-bottom-right-radius: 27px;
+  background-color: rgba(0, 0, 0, 0.336);
+  color: antiquewhite;
+
+  align-content: center;
+}
+
+.PageButton:hover {
+  background-color: rgba(0, 0, 0, 0.836);
+  box-shadow: 0 0 30px black;
 }
 
 #PageContent {
@@ -50,7 +99,7 @@
   margin: 0 auto;
   align-content: space-around;
   color: white;
-  font: 13px;
+  font: 50px;
   text-shadow: 0 0 10px black;
 }
 
@@ -64,7 +113,7 @@
   padding: 12px 30px;
   margin: 0 5px;
   text-decoration: none;
-  color: white;
+  color: antiquewhite;
   text-shadow: 0 0 10px black;
 }
 
@@ -76,6 +125,12 @@
   z-index: 1;
 }
 
+.dropdown-content > .dropDescript {
+  width: 30%;
+  background-color: rgba(0, 0, 0, 0.479);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
 .dropdown:hover .dropdown-content {
   display: block;
 }
@@ -85,10 +140,18 @@
 }
 
 #hamburger {
-  color: white;
-  text-shadow: 0 0 10px black;
-  border: none;
-  background-color: antiquewhite;
+  padding: 0.75rem 1.5rem;
+  border-top-left-radius: 27px;
+  border-bottom-left-radius: 27px;
+  border-top-right-radius: 27px;
+  border-bottom-right-radius: 27px;
+  background-color: rgba(0, 0, 0, 0.336);
+  color: antiquewhite;
+}
+
+#hamburger:hover {
+  background-color: rgba(0, 0, 0, 0.836);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.555);
 }
 
 #BoxContainer {
@@ -96,16 +159,16 @@
   margin-right: 5%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  text-shadow: 0 0 2px black;
+  color: antiquewhite;
 }
 
 .Box {
-  color: yellow;
-  width: 25%;
+  width: 20%;
 }
 
 .VideoBox {
-  color: yellow;
 }
 
 .TextBox {
@@ -113,9 +176,67 @@
 }
 
 #PageNavigation {
-  opacity: 0;
+  opacity: 1;
   overflow: hidden;
   transition: all 1s;
+}
+
+.LoginBar {
+  margin-left: 17%;
+  padding-top: 1%;
+}
+
+.LoginBox:hover {
+  background-color: rgba(250, 235, 215, 0.596);
+  box-shadow: 0 0 30px black;
+}
+
+.LoginBox {
+  padding: 0.75rem 1.5rem;
+  border-top-left-radius: 27px;
+  border-bottom-left-radius: 27px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: rgba(250, 235, 215, 0.466);
+  text-shadow: 0 0 2px black;
+  color: white;
+}
+
+.PassBox:hover {
+  background-color: rgba(250, 235, 215, 0.596);
+  box-shadow: 0 0 30px black;
+}
+
+.PassBox {
+  padding: 0.75rem 1.5rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: rgba(250, 235, 215, 0.466);
+  text-shadow: 0 0 2px black;
+  color: white;
+}
+
+.LoginButton {
+  padding: 0.75rem 1.5rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 27px;
+  border-bottom-right-radius: 27px;
+  background-color: rgba(0, 0, 0, 0.336);
+  color: antiquewhite;
+}
+
+
+.pkImage
+{
+    width: 20px;
+}
+
+.LoginButton:hover {
+  background-color: rgba(0, 0, 0, 0.836);
+  box-shadow: 0 0 30px black;
 }
 
 @media only screen and (max-device-width: 768px) {

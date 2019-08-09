@@ -23,6 +23,9 @@ public class VideoController {
     @Autowired
     GenreRepository gr;
 
+    @Autowired
+    CategoryRepository cr;
+
     static String now = "";
 
     String connstr = "jdbc:sqlserver://localhost;databasename=Superbowl2;user=dbadmin;password=123123";
@@ -51,6 +54,20 @@ public class VideoController {
             List<Video> allVideos = vr.getAllVideos();
             Collections.shuffle(allVideos);
             model.addAttribute("allVideos", allVideos);
+
+            now = "";
+
+            int page = 0;
+            int pageSize = 4;
+            int pageCount = (int) Math.ceil(new Double(allVideos.size()) / pageSize);
+            List<Video> vid = vr.getPage(page - 1, pageSize, allVideos);
+
+            int[] pages = toArray(pageCount);
+            model.addAttribute("vid", vid);
+            model.addAttribute("pages", pages);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("showPrev", page > 1);
+            model.addAttribute("showNext", page < pageCount);
         }
         return check;
     }
@@ -62,6 +79,20 @@ public class VideoController {
             List<Video> allVideos = vr.getAllVideos();
             Collections.shuffle(allVideos);
             model.addAttribute("allVideos", allVideos);
+
+            now = "";
+
+            int page = 0;
+            int pageSize = 4;
+            int pageCount = (int) Math.ceil(new Double(allVideos.size()) / pageSize);
+            List<Video> vid = vr.getPage(page - 1, pageSize, allVideos);
+
+            int[] pages = toArray(pageCount);
+            model.addAttribute("vid", vid);
+            model.addAttribute("pages", pages);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("showPrev", page > 1);
+            model.addAttribute("showNext", page < pageCount);
 
             return "SBindex";
         } else {
@@ -84,11 +115,13 @@ public class VideoController {
     @PostMapping("/search")
     public String postSearch(Model model, @RequestParam String searchBar) {
 
+        String url = "search/";
+
         List<Video> listOfVideos = vr.searchVideo(searchBar);
         model.addAttribute("listOfVideos", listOfVideos);
         now = searchBar;
 
-        int page = 0;
+        int page = 1;
         int pageSize = 4;
         int pageCount = (int) Math.ceil(new Double(listOfVideos.size()) / pageSize);
         List<Video> vid = vr.getPage(page - 1, pageSize, listOfVideos);
@@ -100,6 +133,7 @@ public class VideoController {
         model.addAttribute("showPrev", page > 1);
         model.addAttribute("showNext", page < pageCount);
 
+        model.addAttribute("url", url);
 
         return "search";
     }
@@ -111,33 +145,187 @@ public class VideoController {
     }
 
     @GetMapping("/genre/{genre}")
-    public String getActionGenre(Model model, @PathVariable String genre) {
-        List<Video> listOfVideos = gr.getGenreVideos(genre);
-        model.addAttribute("listOfVideos", listOfVideos);
+    public String getGenre(Model model, HttpSession session, @PathVariable String genre) {
+        String url = "genre/" + genre;
 
-        return "search";
+        String checkSession = (String) session.getAttribute("username");
+        if (checkSession != null) {
+            now = genre;
+            List<Video> listOfVideos = gr.getGenreVideos(now);
+            int pageSize = 4;
+            int page = 1;
+            int pageCount = (int) Math.ceil(new Double(listOfVideos.size()) / pageSize);
+            List<Video> vid = vr.getPage(page - 1, pageSize, listOfVideos);
 
+            int[] pages = toArray(pageCount);
+
+
+            List<Video> theRightVids = new ArrayList<>();
+
+            for (int i = 0; i < 4; i++) {
+                int z = ((page - 1) * 4) + i;
+
+                if (z < listOfVideos.size()) {
+                    theRightVids.add(listOfVideos.get(z));
+                }
+            }
+
+            model.addAttribute("listOfVideos", theRightVids);
+            model.addAttribute("vid", vid);
+            model.addAttribute("pages", pages);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("showPrev", page > 1);
+            model.addAttribute("showNext", page < pageCount);
+            model.addAttribute("page", page);
+
+            model.addAttribute("url", url);
+
+            return "search";
+        } else {
+            return "login";
+        }
+    }
+
+    @GetMapping("/category/{category}")
+    public String getCategory(Model model, HttpSession session, @PathVariable String category) {
+        String url = "category/" + category;
+
+        String checkSession = (String) session.getAttribute("username");
+        if (checkSession != null) {
+            now = category;
+            List<Video> listOfVideos = cr.getCategoryVideos(now);
+            int pageSize = 4;
+            int page = 1;
+            int pageCount = (int) Math.ceil(new Double(listOfVideos.size()) / pageSize);
+            List<Video> vid = vr.getPage(page - 1, pageSize, listOfVideos);
+            int[] pages = toArray(pageCount);
+
+            List<Video> theRightVids = new ArrayList<>();
+            model.addAttribute("listOfVideos", listOfVideos);
+            model.addAttribute("vid", vid);
+            model.addAttribute("pages", pages);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("showPrev", page > 1);
+            model.addAttribute("showNext", page < pageCount);
+            model.addAttribute("page", page);
+
+            model.addAttribute("url", url);
+
+            return "search";
+        } else {
+            return "login";
+        }
+    }
+
+    @GetMapping("/decade/{decade}")
+    public String getDecade(Model model, HttpSession session, @PathVariable String decade) {
+        String url = "decade/" + decade;
+        String checkSession = (String) session.getAttribute("username");
+        if (checkSession != null) {
+            now = decade;
+            List<Video> listOfVideos = vr.getVideosByDecade(now);
+            int pageSize = 4;
+            int page = 1;
+            int pageCount = (int) Math.ceil(new Double(listOfVideos.size()) / pageSize);
+            List<Video> vid = vr.getPage(page - 1, pageSize, listOfVideos);
+            int[] pages = toArray(pageCount);
+
+            model.addAttribute("listOfVideos", listOfVideos);
+            model.addAttribute("vid", vid);
+            model.addAttribute("pages", pages);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("showPrev", page > 1);
+            model.addAttribute("showNext", page < pageCount);
+            model.addAttribute("page", page);
+
+
+            model.addAttribute("url", url);
+
+
+            return "search";
+        } else {
+            return "login";
+        }
     }
 
     @GetMapping("/search/{page}")
-    public String book(Model model, @PathVariable Integer page) {
+    public String paginationSearch(Model model, HttpSession session, @PathVariable Integer page) {
+        String url = "search/";
+        String checkSession = (String) session.getAttribute("username");
+        if (checkSession != null) {
+            List<Video> listOfVideos = vr.searchVideo(now);
 
-        List<Video> listOfVideos = vr.searchVideo(now);
+            int pageSize = 4;
+            int pageCount = (int) Math.ceil(new Double(listOfVideos.size()) / pageSize);
+            List<Video> vid = vr.getPage(page - 1, pageSize, listOfVideos);
 
-        int pageSize = 4;
-        int pageCount = (int) Math.ceil(new Double(listOfVideos.size()) / pageSize);
-        List<Video> vid = vr.getPage(page - 1, pageSize, listOfVideos);
+            int[] pages = toArray(pageCount);
 
-        int[] pages = toArray(pageCount);
+            List<Video> theRightVids = new ArrayList<>();
 
-        model.addAttribute("listOfVideos", listOfVideos);
-        model.addAttribute("vid", vid);
-        model.addAttribute("pages", pages);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("showPrev", page > 1);
-        model.addAttribute("showNext", page < pageCount);
-        model.addAttribute("page", page);
-        return "search";
+            for (int i = 0; i < 4; i++) {
+                int z = ((page - 1) * 4) + i;
+
+                if (z < listOfVideos.size()) {
+                    theRightVids.add(listOfVideos.get(z));
+                }
+            }
+
+            model.addAttribute("listOfVideos", theRightVids);
+            model.addAttribute("vid", vid);
+            model.addAttribute("pages", pages);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("showPrev", page > 1);
+            model.addAttribute("showNext", page < pageCount);
+            model.addAttribute("page", page);
+
+            model.addAttribute("url", url);
+
+            return "search";
+        } else {
+            return "login";
+        }
+    }
+
+    @GetMapping("/decade/{year}/{page}")
+    public String paginationSearchDecade(Model model, HttpSession session, @PathVariable Integer year, @PathVariable Integer page) {
+
+        String url = "decade/" + year + "/";
+
+        String checkSession = (String) session.getAttribute("username");
+        if (checkSession != null) {
+            List<Video> listOfVideos = vr.getVideosByDecade(now);
+
+            int pageSize = 4;
+            int pageCount = (int) Math.ceil(new Double(listOfVideos.size()) / pageSize);
+            List<Video> vid = vr.getPage(page - 1, pageSize, listOfVideos);
+
+            int[] pages = toArray(pageCount);
+
+            List<Video> theRightVids = new ArrayList<>();
+
+            for (int i = 0; i < 4; i++) {
+                int z = ((page - 1) * 4) + i;
+
+                if (z < listOfVideos.size()) {
+                    theRightVids.add(listOfVideos.get(z));
+                }
+            }
+
+            model.addAttribute("listOfVideos", theRightVids);
+            model.addAttribute("vid", vid);
+            model.addAttribute("pages", pages);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("showPrev", page > 1);
+            model.addAttribute("showNext", page < pageCount);
+            model.addAttribute("page", page);
+
+            model.addAttribute("url", url);
+
+            return "search";
+        } else {
+            return "login";
+        }
     }
 
     private int[] toArray(int num) {
@@ -146,6 +334,93 @@ public class VideoController {
             result[i] = i + 1;
         }
         return result;
+    }
+
+
+    /**
+     * METODER FÖR PAGINATION
+     */
+
+    @GetMapping("/genre/{genre}/{page}")
+    public String paginationGenreSearch(Model model, HttpSession session, @PathVariable String genre, @PathVariable Integer page) {
+
+        String url = "genre/" + genre + "/";
+
+        String checkSession = (String) session.getAttribute("username");
+        if (checkSession != null) {
+            List<Video> listOfVideos = gr.getGenreVideos(now);
+
+            int pageSize = 4;
+            int pageCount = (int) Math.ceil(new Double(listOfVideos.size()) / pageSize);
+            List<Video> vid = vr.getPage(page - 1, pageSize, listOfVideos);
+
+            int[] pages = toArray(pageCount);
+
+            List<Video> theRightVids = new ArrayList<>();
+
+            for (int i = 0; i < 4; i++) {
+                int z = ((page - 1) * 4) + i;
+
+                if (z < listOfVideos.size()) {
+                    theRightVids.add(listOfVideos.get(z));
+                }
+            }
+
+            model.addAttribute("listOfVideos", theRightVids);
+            model.addAttribute("vid", vid);
+            model.addAttribute("pages", pages);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("showPrev", page > 1);
+            model.addAttribute("showNext", page < pageCount);
+            model.addAttribute("page", page);
+
+            model.addAttribute("url", url);
+
+            return "search";
+        } else {
+            return "login";
+        }
+    }
+
+    @GetMapping("/category/{category}/{page}")
+    public String paginationCategorySearch(Model model, HttpSession session, @PathVariable String category, @PathVariable Integer page) {
+
+        String url = "category/" + category + "/";
+
+        String checkSession = (String) session.getAttribute("username");
+        if (checkSession != null) {
+            List<Video> listOfVideos = cr.getCategoryVideos(now);
+
+            int pageSize = 4;
+            int pageCount = (int) Math.ceil(new Double(listOfVideos.size()) / pageSize);
+            List<Video> vid = vr.getPage(page - 1, pageSize, listOfVideos);
+
+            int[] pages = toArray(pageCount);
+
+            List<Video> theRightVids = new ArrayList<>();
+
+            for (int i = 0; i < 4; i++) {
+                int z = ((page - 1) * 4) + i;
+
+                if (z < listOfVideos.size()) {
+                    theRightVids.add(listOfVideos.get(z));
+                }
+            }
+
+            model.addAttribute("listOfVideos", theRightVids);
+            model.addAttribute("vid", vid);
+            model.addAttribute("pages", pages);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("showPrev", page > 1);
+            model.addAttribute("showNext", page < pageCount);
+            model.addAttribute("page", page);
+
+            model.addAttribute("url", url);
+
+            return "search";
+        } else {
+            return "login";
+        }
     }
 
 }

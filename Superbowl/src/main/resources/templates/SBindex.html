@@ -17,14 +17,22 @@
     <div id="PageNavigation">
         <div>
             <a href="#" th:href="@{/logout}" class="menu-item" data-target="content-page-4" data-index="3"
-               style='color: red'>Log
+               style='color: rgb(88, 214, 30)'>Log
                 out</a>
         </div>
         <div>
-            <a href="#" class="menu-item" data-target="content-page-1" data-index="1">Home</a>
+            <a href="/" class="menu-item" data-target="content-page-1" data-index="1">Home</a>
         </div>
-        <div>
-            <a href="#" class="menu-item" data-target="content-page-2" data-index="2">Commercials</a>
+        <div class="dropdown">
+            <a class="dropbutton">Decade</a>
+            <div class="dropdown-content">
+                <a href="/decade/1960">1960</a>
+                <a href="/decade/1970">1970</a>
+                <a href="/decade/1980">1980</a>
+                <a href="/decade/1990">1990</a>
+                <a href="/decade/2000">2000</a>
+                <a href="/decade/2010">2010</a>
+            </div>
         </div>
         <div class="dropdown">
             <a class="dropbutton">Genres</a>
@@ -42,43 +50,49 @@
         <div class="dropdown">
             <a class="dropbutton">Products</a>
             <div class="dropdown-content">
-                <a href="/genre/technology">Technology</a>
-                <a href="/genre/automobile">Automobile</a>
-                <a href="/genre/food">Food</a>
-                <a href="/genre/sport">Sport</a>
-                <a href="/genre/clothes">Clothes</a>
-                <a href="/genre/accessories">Accessories</a>
-                <a href="/genre/service">Service</a>
+                <a href="/category/technology">Technology</a>
+                <a href="/category/automobile">Automobile</a>
+                <a href="/category/food">Food</a>
+                <a href="/category/sport">Sport</a>
+                <a href="/category/clothes">Clothes</a>
+                <a href="/category/accessories">Accessories</a>
+                <a href="/category/service">Service</a>
             </div>
         </div>
     </div>
-    <button id="hamburger">Show Menu</button>
+    <button id="hamburger">
+        <img src="/burgermenu-icon.png"/>
+    </button>
 </div>
 <div class="LogoSearchBar">
     <img id="Logo" src="/SBlogo.png"/>
     <div id="SearchBar">
         <form method="POST" action="/search">
-            <input type="field" name="searchBar" size="100"/>
-            <input type="submit" value="GO SEARCH!"/>
+            <input class="SearchBox" type="field" name="searchBar" size="100"/>
+            <input class="SearchButton" type="submit" value="GO SEARCH!"/>
         </form>
     </div>
     <div id="PageContent">
         <div id="BoxContainer">
-            <div id="Box1" class="Box" th:if="${allVideos[0]} != null">
+            <div id="Box1" class="Box" th:if="${allVideos} != null">
                 <th th:text="${allVideos[0].videoName}"></th>
+                <img class="pkImage" th:if="${allVideos[0].PK}" th:src="@{/ok1.png}"/>
+                <img class="pkImage" th:if="${not allVideos[0].PK}" th:src="@{/no.png}"/>
                 <div id="VideoBox1" class="VideoBox">
                     <iframe th:src="${allVideos[0].embeddedUrl}" frameborder="0"
                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen></iframe>
-                    <!--</ul>-->
                 </div>
                 <div id="TextBox1" class="TextBox">
+
                     <th th:text="${allVideos[0].description}"></th>
                 </div>
             </div>
 
             <div id="Box2" class="Box" th:if="${#lists.size(allVideos) gt 1}">
                 <th th:text="${allVideos[1].videoName}"></th>
+                <img class="pkImage" th:if="${allVideos[1].PK}" th:src="@{/ok1.png}"/>
+                <img class="pkImage" th:if="${not allVideos[1].PK}" th:src="@{/no.png}"/>
                 <div id="VideoBox2" class="VideoBox">
                     <th th:if="${allVideos[1]} != null">
                         <iframe th:src="${allVideos[1].embeddedUrl}" frameborder="0"
@@ -92,6 +106,8 @@
 
             <div id="Box3" class="Box" th:if="${#lists.size(allVideos) gt 2}">
                 <th th:text="${allVideos[2].videoName}"></th>
+                <img class="pkImage" th:if="${allVideos[2].PK}" th:src="@{/ok1.png}"/>
+                <img class="pkImage" th:if="${not allVideos[2].PK}" th:src="@{/no.png}"/>
                 <div id="VideoBox3" class="VideoBox">
                     <iframe th:src="${allVideos[2].embeddedUrl}" frameborder="0"
                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -104,21 +120,21 @@
 
             <div id="Box4" class="Box" th:if="${#lists.size(allVideos) gt 3}">
                 <th th:text="${allVideos[3]?.videoName}"></th>
+                <img class="pkImage" th:if="${allVideos[3].PK}" th:src="@{/ok1.png}"/>
+                <img class="pkImage" th:if="${not allVideos[3].PK}" th:src="@{/no.png}"/>
                 <div id="VideoBox4" class="VideoBox">
-                    <!--<ul th:each="video : ${allVideos}">-->
-                    <!-- <li /li>-->
                     <iframe th:src="${allVideos[3]?.embeddedUrl}" frameborder="0"
                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen></iframe>
-                    <!--</ul>-->
                 </div>
                 <div id="TextBox4" class="TextBox">
                     <th th:text="${allVideos[3]?.description}"></th>
                 </div>
             </div>
-
         </div>
+
     </div>
     <div id="PageFooter">Copyright Academy 2019</div>
+</div>
 </body>
 </html>

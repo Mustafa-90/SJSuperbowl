@@ -18,46 +18,77 @@ public class VideoRepository {
 
 
     public List<Video> searchVideo(String searchBar) {
+
         List<Video> listOfVideos = new ArrayList<>();
-        String name = "", description = "", embeddedUrl = "", companyName = "";
+
+        String name = "", description = "", embeddedUrl = "";
+
+        boolean isPK;
+
         String[] tags = new String[3];
+
         String[] splitTags = searchBar.split(" ");
 
         tags[0] = splitTags[0];
+
         if (splitTags.length > 1)
+
             tags[1] = splitTags[1];
+
         if (splitTags.length > 2)
+
             tags[2] = splitTags[2];
 
+        String sql = "SELECT name, Description, embedded_URL, isPK\n" +
 
-        String sql = "SELECT name, Description, embedded_URL, companyName\n" +
                 "FROM Video\n" +
+
                 "JOIN Company ON company_Id = Company.id\n" +
+
                 "JOIN Genre on genre_Id = Genre.id\n" +
+
                 "JOIN category on category_id = category.id\n" +
+
                 "WHERE searchtag like ?\n" +
+
                 "OR searchtag like ?\n" +
+
                 "OR searchtag like ?";
 
         try (Connection conn = DriverManager.getConnection(connstr)) {
+
             PreparedStatement ps = conn.prepareStatement(sql);
+
             ps.setString(1, "%" + tags[0] + "%");
+
             ps.setString(2, "%" + tags[1] + "%");
+
             ps.setString(3, "%" + tags[2] + "%");
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
+
                 name = rs.getString(1);
+
                 description = rs.getString(2);
+
                 embeddedUrl = rs.getString(3);
-                companyName = rs.getString(4);
-                listOfVideos.add(new Video(name, description, companyName, embeddedUrl));
+
+                isPK = rs.getBoolean(4);
+
+                listOfVideos.add(new Video(name, description, isPK, embeddedUrl));
+
             }
+
         } catch (SQLException e) {
+
             e.printStackTrace();
+
         }
 
         return listOfVideos;
+
     }
 
 
@@ -87,33 +118,81 @@ public class VideoRepository {
         return check;
     }
 
-
-    public List<Video> getAllVideos() {
+    public List<Video> getVideosByDecade(String decade) {
         List<Video> listOfVideos = new ArrayList<>();
-        String name = "", description = "", embeddedUrl = "", companyName = "";
-
-        String sql = "SELECT name, Description, embedded_URL, companyName\n" +
+        String name = "", description = "", embeddedUrl = "";
+        Boolean isPK;
+        String sql = "SELECT name, Description, embedded_URL, isPK\n" +
                 "FROM Video\n" +
                 "JOIN Company ON company_Id = Company.id\n" +
                 "JOIN Genre on genre_Id = Genre.id\n" +
-                "JOIN category on category_id = category.id\n";
+                "JOIN category on category_id = category.id\n" +
+                "WHERE Decade like ?\n" ;
 
         try (Connection conn = DriverManager.getConnection(connstr)) {
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, decade);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 name = rs.getString(1);
                 description = rs.getString(2);
                 embeddedUrl = rs.getString(3);
-                companyName = rs.getString(4);
-                listOfVideos.add(new Video(name, description, companyName, embeddedUrl));
+                isPK = rs.getBoolean(4);
+                listOfVideos.add(new Video(name, description, isPK, embeddedUrl));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return listOfVideos;
+    }
+
+    public List<Video> getAllVideos() {
+
+        List<Video> listOfVideos = new ArrayList<>();
+
+        String name = "", description = "", embeddedUrl = "";
+
+        boolean isPK;
+
+        String sql = "SELECT name, Description, embedded_URL, isPK\n" +
+
+                "FROM Video\n" +
+
+                "JOIN Company ON company_Id = Company.id\n" +
+
+                "JOIN Genre on genre_Id = Genre.id\n" +
+
+                "JOIN category on category_id = category.id\n";
+
+        try (Connection conn = DriverManager.getConnection(connstr)) {
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                name = rs.getString(1);
+
+                description = rs.getString(2);
+
+                embeddedUrl = rs.getString(3);
+
+                isPK = rs.getBoolean(4);
+
+                listOfVideos.add(new Video(name, description, isPK, embeddedUrl));
+
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
 
         return listOfVideos;
+
     }
 
     public List<Video> getPage(int page, int pageSize, List<Video> listOfVideos) {

@@ -11,11 +11,11 @@ public class Video {
 
     }
 
-    public Video(String videoName, String description, String companyName, String embeddedUrl) {
+    public Video(String videoName, String description, Boolean isPK, String embeddedUrl) {
         this.embeddedUrl = embeddedUrl;
         this.videoName = videoName;
         this.description = description;
-        this.companyName = companyName;
+        this.isPK = isPK;
     }
 
     public Video(int id, int companyId, int genreId, int categoryId, String embeddedUrl, boolean isPK, int decade, String videoName, String actor, String description) {
